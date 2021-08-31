@@ -15,7 +15,7 @@ const AddComent = ({ asin, bookName, loadComments }) => {
     loadSend: false,
     sendSuccess: false,
     loadWarn: false,
-    err: null,
+    err: null
   });
   // FUNCTIONS
   //   INPUT COMMENT
@@ -41,7 +41,8 @@ const AddComent = ({ asin, bookName, loadComments }) => {
   };
   // warning
   const loadWarn = (error) => {
-    setState({ ...State, loadWarn: !State.loadWarn ? !State.err : error });
+    console.log(error)
+    setState({ ...State, loadWarn: true, err: error.status+' '+ error.statusText });
   };
   // Set empty
   const emptyVal = () => {
@@ -73,15 +74,16 @@ const AddComent = ({ asin, bookName, loadComments }) => {
       );
       if (response.ok) {
         loadComments();
-        setState({ ...State, loadSend:false });
+        setState({ ...State, loadSend: false });
         emptyVal();
       } else {
-        loadAlert();
+        loadWarn(response);
       }
-    } catch (e) {
+    } catch (error) {
+      console.log(error)
+      loadWarn();
       emptyVal();
       loadAlert();
-      console.log(e);
     }
   };
   return (
