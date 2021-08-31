@@ -36,7 +36,7 @@ const SingBook =({book,showThisCom})=> {
             <div className="d-flex flex-column justify-content-between">
               <Button variant="info my-2">Read</Button>
               <Button
-                onClick={()=> comentClick(book.asin)}
+                onClick={()=> showThisCom(book.asin)}
                 variant="secondary mb-1 mx-3"
                 value={book.asin}
               >

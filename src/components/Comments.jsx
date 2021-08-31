@@ -3,9 +3,18 @@ import { Spinner } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
 
-const Comments = ({_id,author,comment,rate,asin,loadComments}) => {
+const Comments = ({ _id, author, comment, rate, asin, loadComments }) => {
   // States
   const [State, setState] = useState({ id: _id, loadDel: false });
+
+  // loaders
+  const succDelete = () => {
+    return setState({ ...State, loadDel: !State.loadDel });
+  };
+  const reloadCom = () => {
+    loadComments();
+  };
+
   // delete coment
   const deleteCom = async (e) => {
     succDelete();
@@ -20,21 +29,13 @@ const Comments = ({_id,author,comment,rate,asin,loadComments}) => {
           },
         }
       );
-      if (response.ok) {
-        succDelete()
-        reloadCom();
-      }
-    } catch (e) {
+      const data = await response.json();
+      succDelete();
       reloadCom();
+    } catch (e) {
+      succDelete();
       console.error(e);
     }
-  };
-  // loaders
-  const succDelete = () => {
-    setState({ ...State, loadDel: !State.loadDel });
-  };
-  const reloadCom = (e) => {
-    loadComments();
   };
   return (
     <>
@@ -56,7 +57,7 @@ const Comments = ({_id,author,comment,rate,asin,loadComments}) => {
               className="mx-auto text-center"
             />
           )}
-          <a className="delete" onClick={()=>deleteCom()}>
+          <a className="delete" onClick={() => deleteCom()}>
             {" "}
             <AiFillCloseCircle />{" "}
           </a>

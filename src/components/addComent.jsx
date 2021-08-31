@@ -26,6 +26,12 @@ const AddComent = ({ asin, bookName, loadComments }) => {
     });
   };
   // Sending alerts
+  const success = () => {
+    setState({ ...State, loadSend: !State.loadSend });
+  };
+  const sendSuccess = () => {
+    setState({ ...State, sendSuccess: !State.sendSuccess });
+  };
   const sendingAlert = () => {
     setState({ ...State, sendSuccess: !State.sendSuccess });
   };
@@ -47,6 +53,7 @@ const AddComent = ({ asin, bookName, loadComments }) => {
       elementId: asin,
     });
   };
+
   //   SEND COMMENTS
   const sendComment = async (e) => {
     e.preventDefault();
@@ -65,14 +72,15 @@ const AddComent = ({ asin, bookName, loadComments }) => {
         }
       );
       if (response.ok) {
-        sendingAlert();
-        loadAlert();
         loadComments();
+        setState({ ...State, loadSend:false });
+        emptyVal();
+      } else {
+        loadAlert();
       }
     } catch (e) {
+      emptyVal();
       loadAlert();
-      sendingAlert();
-      loadWarn(e);
       console.log(e);
     }
   };
@@ -118,7 +126,7 @@ const AddComent = ({ asin, bookName, loadComments }) => {
               required
             />
           </Form.Group>
-          
+
           {State.loadSend ? (
             <Spinner animation="border" variant="warning" />
           ) : State.sendSuccess ? (

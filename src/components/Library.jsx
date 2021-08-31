@@ -1,4 +1,3 @@
-
 import { Row, Col } from "react-bootstrap";
 import LatestRel from "./LatestRel";
 import CommentsArea from "./CommentArea";
@@ -6,15 +5,13 @@ import { useState } from "react";
 // LIBRARY
 const Library = () => {
   const [State, setState] = useState({
-    showCom: false,
-    comAsin: null
+    showComments: false,
+    commAsin: null,
   });
 
   const showThisCom = (asin) => {
-    setState({ ...State, showCom: true });
-    State.comAsin !== asin
-      ? setState({ ...State, comAsin: asin })
-      : setState({ ...State, showCom: !State.showCom, comAsin: asin });
+    setState({ commAsin: asin, showComments: true });
+    State.commAsin == asin && setState({ showComments: false });
   };
   return (
     <>
@@ -22,7 +19,7 @@ const Library = () => {
         <Col xs="9">
           <LatestRel
             showThisCom={(asin) => showThisCom(asin)}
-            showCom={State.showCom}
+            showCom={State.showComments}
           />
         </Col>
         <Col xs="3 d-flex flex-column text-center">
@@ -30,8 +27,8 @@ const Library = () => {
             <h2 className="font-weight-light mx-auto">Commentaries</h2>
             <hr />
           </div>
-          {State.showCom ? (
-            <CommentsArea asin={State.comAsin} />
+          {State.showComments ? (
+            <CommentsArea asin={State.commAsin} />
           ) : (
             <h5 className="font-weight-light mx-auto">Book're not picked</h5>
           )}
