@@ -1,50 +1,44 @@
-import SciFi from "../data/scifi.json";
-import Fantasy from "../data/fantasy.json";
-import History from "../data/history.json";
-import Romance from "../data/romance.json";
-import Horror from "../data/horror.json";
-import { Component } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+
+import { Row, Col } from "react-bootstrap";
 import LatestRel from "./LatestRel";
 import CommentsArea from "./CommentArea";
 import { useState } from "react";
-const Library= () =>{
-
-const [State, setState] = useState({
-  showCom: false,
-  comAsin: null})
+// LIBRARY
+const Library = () => {
+  const [State, setState] = useState({
+    showCom: false,
+    comAsin: null
+  });
 
   const showThisCom = (asin) => {
-    this.setState({ showCom: true });
-
-    this.state.comAsin !== asin
-      ? this.setState({ comAsin: asin })
-      : this.setState({ showCom: !this.state.showCom, comAsin: asin });
+    setState({ ...State, showCom: true });
+    State.comAsin !== asin
+      ? setState({ ...State, comAsin: asin })
+      : setState({ ...State, showCom: !State.showCom, comAsin: asin });
   };
-
-    return (
-      <>
-        <Row className="px-4">
-          <Col xs="9">
-            <LatestRel
-              showThisCom={this.showThisCom}
-              showCom={this.state.showCom}
-            />
-          </Col>
-          <Col xs="3 d-flex flex-column text-center">
-            <div className="text-center">
-              <h2 className="font-weight-light mx-auto">Commentaries</h2>
-              <hr />
-              </div>
-              {this.state.showCom ? (
-                <CommentsArea asin={this.state.comAsin} />
-              ) : (
-                <h5 className="font-weight-light mx-auto">Book're not picked</h5>
-              )}
-          </Col>
-        </Row>
-      </>
-    );
-  }
+  return (
+    <>
+      <Row className="px-4">
+        <Col xs="9">
+          <LatestRel
+            showThisCom={(asin) => showThisCom(asin)}
+            showCom={State.showCom}
+          />
+        </Col>
+        <Col xs="3 d-flex flex-column text-center">
+          <div className="text-center">
+            <h2 className="font-weight-light mx-auto">Commentaries</h2>
+            <hr />
+          </div>
+          {State.showCom ? (
+            <CommentsArea asin={State.comAsin} />
+          ) : (
+            <h5 className="font-weight-light mx-auto">Book're not picked</h5>
+          )}
+        </Col>
+      </Row>
+    </>
+  );
+};
 
 export default Library;

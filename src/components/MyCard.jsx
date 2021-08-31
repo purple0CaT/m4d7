@@ -1,14 +1,13 @@
 import { Card, Col, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import {useState} from "react";
 
-const SingBook =({book,showThisCom, showCom})=> {
+const SingBook =({book,showThisCom})=> {
 
   const [State, setState] = useState({
     clicked: false,
   })
   const comentClick = (e) => {
-    console.log(book.asin);
-    showThisCom(book.asin);
+    return(showThisCom(e))
   };
     return (
       <Col
@@ -37,7 +36,7 @@ const SingBook =({book,showThisCom, showCom})=> {
             <div className="d-flex flex-column justify-content-between">
               <Button variant="info my-2">Read</Button>
               <Button
-                onClick={(e) => comentClick(e)}
+                onClick={()=> comentClick(book.asin)}
                 variant="secondary mb-1 mx-3"
                 value={book.asin}
               >

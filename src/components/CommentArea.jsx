@@ -9,6 +9,7 @@ class CommentArea extends React.Component {
     asin: this.props.asin,
     loading: false,
   };
+  
   // On load
   componentDidMount() {
     this.loadComments();

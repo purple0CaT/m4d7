@@ -9,7 +9,7 @@ import React from 'react'
 import Category from './Category'
 import { useState } from 'react'
 
-const LatestRel = (showThisCom, showCom)=>{
+const LatestRel = ({showThisCom, showCom})=>{
 
     const [State, setState] = useState({
       books: [SciFi, Fantasy, History, Romance, Horror],
@@ -23,7 +23,7 @@ const LatestRel = (showThisCom, showCom)=>{
           <hr/>
         </Col>
         {
-        Object.values(State.books).map(categor => <SingBook showThisCom={showThisCom} showCom={showCom} book={categor[0]}/>)
+        Object.values(State.books).map(categor => <SingBook showThisCom={showThisCom} book={categor[0]}/>)
         }
         
         </Row>

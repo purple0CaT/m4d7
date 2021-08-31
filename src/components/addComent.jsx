@@ -118,6 +118,7 @@ const AddComent = ({ asin, bookName, loadComments }) => {
               required
             />
           </Form.Group>
+          
           {State.loadSend ? (
             <Spinner animation="border" variant="warning" />
           ) : State.sendSuccess ? (
