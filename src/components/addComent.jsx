@@ -1,57 +1,62 @@
 import { Button, Alert, Spinner, Form } from "react-bootstrap";
 import React from "react";
+import { useEffect, useState } from "react";
+import customAlert from "./Alert";
 
-class AddComent extends React.Component {
-  state = {
-    asin: this.props.asin,
-    book: this.props.bookName,
+const AddComent = ({ asin, bookName, loadComments }) => {
+  // STATES
+  const [CommentSend, setCommentSend] = useState({
+    author: "",
+    comment: "",
+    rate: 1,
+    elementId: asin,
+  });
+  const [State, setState] = useState({
     loadSend: false,
     sendSuccess: false,
-    commentSend: {
-      author: "",
-      comment: "",
-      rate: 1,
-      elementId: this.props.asin,
-    },
-  };
+    loadWarn: false,
+    err: null,
+  });
+  // FUNCTIONS
   //   INPUT COMMENT
-  comentInput = (e, comentNam) => {
-    this.setState({
-      commentSend: {
-        ...this.state.commentSend,
-        [comentNam]: e.target.value,
-      },
+  const comentInput = (e, comentNam) => {
+    setCommentSend({
+      ...CommentSend,
+      [comentNam]: e.target.value,
     });
   };
   // Sending alerts
-  sendingAlert = () => {
-    this.setState({ sendSuccess: !this.state.sendSuccess });
+  const sendingAlert = () => {
+    setState({ ...State, sendSuccess: !State.sendSuccess });
   };
   // load Send alerts
-  loadAlert = () => {
-    this.setState({ loadSend: !this.state.loadSend });
+  const loadAlert = () => {
+    setState({ ...State, loadSend: !State.loadSend });
+  };
+  // warning
+  const loadWarn = (error) => {
+    setState({ ...State, loadWarn: !State.loadWarn ? !State.err : error });
   };
   // Set empty
-  emptyVal = () => {
-    this.setState({
-      commentSend: {
-        author: "",
-        comment: "",
-        rate: 1,
-        elementId: this.props.asin,
-      },
+  const emptyVal = () => {
+    setCommentSend({
+      ...CommentSend,
+      author: "",
+      comment: "",
+      rate: 1,
+      elementId: asin,
     });
   };
   //   SEND COMMENTS
-  sendComment = async (e) => {
+  const sendComment = async (e) => {
     e.preventDefault();
-    this.loadAlert();
+    loadAlert();
     try {
       const response = await fetch(
         "https://striveschool-api.herokuapp.com/api/comments/",
         {
           method: "POST",
-          body: JSON.stringify(this.state.commentSend),
+          body: JSON.stringify(CommentSend),
           headers: {
             "Content-type": "application/json",
             Authorization:
@@ -59,81 +64,83 @@ class AddComent extends React.Component {
           },
         }
       );
-      const data = await response.json();
       if (response.ok) {
-        console.log(data);
-        this.loadAlert();
-        this.sendingAlert();
-        setTimeout(this.sendingAlert, 1500);
-        setTimeout(this.emptyVal, 1900);
-        this.props.loadComments()
+        sendingAlert();
+        loadAlert();
+        loadComments();
       }
     } catch (e) {
-      this.loadAlert();
+      loadAlert();
+      sendingAlert();
+      loadWarn(e);
       console.log(e);
     }
   };
+  return (
+    <>
+      {/* FORM */}
+      {
+        <form onSubmit={sendComment} key={asin + CommentSend.author}>
+          <Form.Group>
+            <Form.Label>Your name?</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Insert your name"
+              value={CommentSend.author}
+              onChange={(e) => {
+                comentInput(e, "author");
+              }}
+              required
+            />
+          </Form.Group>
 
-  render() {
-    return (
-      <>
-        {/* FORM */}
-        {
-          <form onSubmit={this.sendComment}>
-            <Form.Group>
-              <Form.Label>Your name?</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Insert your name"
-                value={this.state.commentSend.author}
-                onChange={(e) => {
-                  this.comentInput(e, "author");
-                }}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Comment</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Your comment"
-                value={this.state.commentSend.comment}
-                onChange={(e) => {
-                  this.comentInput(e, "comment");
-                }}
-                required
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Rate</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Your comment"
-                value={this.state.commentSend.rate}
-                onChange={(e) => {
-                  this.comentInput(e, "rate");
-                }}
-                required
-              />
-            </Form.Group>
-            {this.state.loadSend ? (
-              <Spinner animation="border" variant="warning" />
-            ) : this.state.sendSuccess ? (
-              <Alert variant="success" className="mt-2">
-                Succes
-              </Alert>
-            ) : (
-              <Button type="submit" variant="success">
+          <Form.Group>
+            <Form.Label>Comment</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your comment"
+              value={CommentSend.comment}
+              onChange={(e) => {
+                comentInput(e, "comment");
+              }}
+              required
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Rate</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Your comment"
+              value={CommentSend.rate}
+              onChange={(e) => {
+                comentInput(e, "rate");
+              }}
+              required
+            />
+          </Form.Group>
+          {State.loadSend ? (
+            <Spinner animation="border" variant="warning" />
+          ) : State.sendSuccess ? (
+            <Alert variant="success" className="mt-2">
+              Succes
+            </Alert>
+          ) : (
+            <>
+              <Button type="submit" variant="success" className="mt-2">
                 {" "}
                 Send
               </Button>
-            )}
-          </form>
-        }
-      </>
-    );
-  }
-}
+              {State.loadWarn && (
+                <Alert variant="warning" className="mt-2">
+                  {State.err}
+                </Alert>
+              )}
+            </>
+          )}
+        </form>
+      }
+    </>
+  );
+};
 
 export default AddComent;

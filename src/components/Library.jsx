@@ -7,14 +7,14 @@ import { Component } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import LatestRel from "./LatestRel";
 import CommentsArea from "./CommentArea";
+import { useState } from "react";
+const Library= () =>{
 
-class Library extends Component {
-  state = {
-    showCom: false,
-    comAsin: null,
-  };
+const [State, setState] = useState({
+  showCom: false,
+  comAsin: null})
 
-  showThisCom = (asin) => {
+  const showThisCom = (asin) => {
     this.setState({ showCom: true });
 
     this.state.comAsin !== asin
@@ -22,7 +22,6 @@ class Library extends Component {
       : this.setState({ showCom: !this.state.showCom, comAsin: asin });
   };
 
-  render() {
     return (
       <>
         <Row className="px-4">
@@ -47,5 +46,5 @@ class Library extends Component {
       </>
     );
   }
-}
+
 export default Library;

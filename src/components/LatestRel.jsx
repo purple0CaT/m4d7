@@ -7,12 +7,13 @@ import SingBook from './MyCard'
 import { Container ,Row, Col } from "react-bootstrap"
 import React from 'react'
 import Category from './Category'
+import { useState } from 'react'
 
-class LatestRel extends React.Component{
-    state = {
+const LatestRel = (showThisCom, showCom)=>{
+
+    const [State, setState] = useState({
       books: [SciFi, Fantasy, History, Romance, Horror],
-    }
-    render(){
+    })
     return (
     <>
       <Container>
@@ -22,19 +23,19 @@ class LatestRel extends React.Component{
           <hr/>
         </Col>
         {
-        Object.values(this.state.books).map(categor => <SingBook showThisCom={this.props.showThisCom} showCom={this.props.showCom} book={categor[0]}/>)
+        Object.values(State.books).map(categor => <SingBook showThisCom={showThisCom} showCom={showCom} book={categor[0]}/>)
         }
         
         </Row>
 
         <Row >
         {
-          Object.values(this.state.books).map(categor => <Category showThisCom={this.props.showThisCom} showCom={this.props.showCom} categor={categor}/>)
+          Object.values(State.books).map(categor => <Category showThisCom={showThisCom} showCom={showCom} categor={categor}/>)
         }
         </Row>
       </Container>
     </>
     )}
-}
+
 
 export default LatestRel

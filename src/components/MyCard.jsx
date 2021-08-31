@@ -1,19 +1,15 @@
 import { Card, Col, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import React from "react";
+import {useState} from "react";
 
-class SingBook extends React.Component {
-  state = {
+const SingBook =({book,showThisCom, showCom})=> {
+
+  const [State, setState] = useState({
     clicked: false,
-    book: this.props.book,
-    check: null
+  })
+  const comentClick = (e) => {
+    console.log(book.asin);
+    showThisCom(book.asin);
   };
-  comentClick = (e) => {
-    console.log(this.state.book.asin);
-    this.props.showThisCom(this.props.book.asin);
-  };
-  render() {
-    let book = this.props.book;
-
     return (
       <Col
         xs="12 mb-2"
@@ -23,12 +19,12 @@ class SingBook extends React.Component {
       >
         <Card
           id="cards"
-          className={this.state.clicked ? "pickedBook h-100" : "h-100"}
+          className={State.clicked ? "pickedBook h-100" : "h-100"}
         >
           <Card.Img variant="top" src={book.img} />
           <Card.Body
             className={
-              this.props.clicked
+              State.clickedlicked
                 ? "pickedBook h-100"
                 : "h-100 d-flex flex-column justify-content-end p-2"
             }
@@ -41,9 +37,9 @@ class SingBook extends React.Component {
             <div className="d-flex flex-column justify-content-between">
               <Button variant="info my-2">Read</Button>
               <Button
-                onClick={(e) => this.comentClick(e)}
+                onClick={(e) => comentClick(e)}
                 variant="secondary mb-1 mx-3"
-                value={this.props.book.asin}
+                value={book.asin}
               >
                 <small>Comments</small>
               </Button>
@@ -53,6 +49,6 @@ class SingBook extends React.Component {
       </Col>
     );
   }
-}
+
 
 export default SingBook;
